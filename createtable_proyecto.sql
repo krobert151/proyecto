@@ -90,9 +90,9 @@ CREATE TABLE encuentro (
 	usuario 			int,
 	especie 			varchar(50),
 	fechaEncuentro 		date NOT NULL,
-	hora 				timestamp,
+	hora 				time,
 	descripcion 		TEXT NOT NULL,
-	foto 				bytea NOT NULL,
+	foto 				varchar NOT NULL,
 	zona 				varchar (50) NOT NULL,
 	tamaño 				NUMERIC, 
 	peso 				NUMERIC,
@@ -129,6 +129,12 @@ CREATE TABLE venta(
 	CONSTRAINT pk_venta PRIMARY KEY (id_venta)
 );
 
+ALTER TABLE lineaventa 
+ADD CONSTRAINT fk_cod_venta FOREIGN KEY (cod_venta) REFERENCES venta,
+ADD CONSTRAINT fk_id_producto FOREIGN KEY (id_producto) REFERENCES producto;
+
+ALTER TABLE venta
+ADD CONSTRAINT fk_cliente FOREIGN KEY (cliente) REFERENCES cliente;
 
 ALTER TABLE encuentro 
 ADD CONSTRAINT fk_usuario FOREIGN KEY (usuario) REFERENCES cliente,
@@ -147,12 +153,7 @@ ADD CONSTRAINT fk_filo FOREIGN KEY (filo) REFERENCES filo;
 ALTER TABLE filo  
 ADD CONSTRAINT fk_reino FOREIGN KEY (reino) REFERENCES reino;
 
-ALTER TABLE lineaventa 
-ADD CONSTRAINT fk_cod_venta FOREIGN KEY (cod_venta) REFERENCES venta,
-ADD CONSTRAINT fk_id_producto FOREIGN KEY (id_producto) REFERENCES producto;
 
-ALTER TABLE venta
-ADD CONSTRAINT fk_cliente FOREIGN KEY (cliente) REFERENCES cliente;
 
 INSERT INTO reino VALUES 
 ('animalia','Los animales son seres pluricelulares y eucariotas de alimentación heterótrofa, respiración aeróbica, reproducción sexual y capacidad de desplazamiento.');
@@ -328,8 +329,7 @@ INSERT INTO especie VALUES
 ('zootoca vivipara','La Zootoca vivipara, también conocida como lagartija vivípara, es una especie de lagartija que vive en gran parte de Europa. Esta lagartija es de pequeño tamaño, con una longitud total de unos 10 cm y su dieta se basa en insectos pequeños. Lo más destacado de esta especie es que, como su nombre indica, es vivípara, es decir, que las crías se desarrollan dentro del cuerpo de la madre y nacen completamente formadas. Su coloración varía desde un marrón oscuro a un gris claro, con manchas marrones y una línea negra que va desde la cabeza hasta la cola. Esta especie es muy adaptable y puede encontrarse en diversos hábitats, incluyendo bosques, praderas y zonas montañosas.','zootoca'),
 ('chalcides bedriagai','Chalcides bedriagai es una lagartija endémica del norte de África, especialmente de Marruecos. Esta especie es conocida por su cuerpo esbelto y su cola larga y delgada, que a menudo se rompe como una forma de defensa. El color de su piel varía de marrón amarillento a grisáceo, con manchas oscuras en la cabeza y el cuerpo. La Chalcides bedriagai es un animal terrestre y se puede encontrar en hábitats secos y áridos como desiertos, llanuras y montañas rocosas. Se alimenta principalmente de insectos y pequeños invertebrados.','chalcides');
 
-INSERT INTO usuario (nombre, apellidos, correo, username, passwd, fechaNac) 
-VALUES 
+INSERT INTO usuario (nombre, apellidos, correo, username, passwd, fechaNac) VALUES 
 ('Juan', 'Pérez González', 'juanpg@gmail.com', 'juapgo', 'B@rr4Cud@!', '1990-05-15'),
 ('María', 'López Martínez', 'marialm@hotmail.com', 'maloma', 'T0pst@k3r#', '1985-11-22'),
 ('Pedro', 'García Fernández', 'pedrogf@yahoo.com', 'pegafe', 'M0v13F@n#', '1995-02-08'),
@@ -342,7 +342,24 @@ VALUES
 ('David', 'Martínez Sánchez', 'davidms@yahoo.com', 'davmas', 'N3v3rG1v3Up#', '1989-03-22'),
 ('Lucía', 'Pérez García', 'luciapg@gmail.com', 'lucper', 'M1ndTh3G@p#', '1997-11-07'),
 ('Manuel', 'González Fernández', 'manuelgf@yahoo.com', 'mangon', 'P@ssw0rd!', '1993-05-02'),
-('Roberto','Rebolledo Naharro','robertorebolledo151@gmail.com','krobert151','Krobert_151','2004-10-12');
+('Roberto','Rebolledo Naharro','robertorebolledo151@gmail.com','krobert151','Krobert_151','2004-10-12'),
+('Marta', 'Rodríguez Martín', 'martarodriguez@gmail.com', 'marrod', 'C00k13M0n$t3r#', '1992-08-10'),
+('Ricardo', 'Sánchez González', 'ricardosanchez@hotmail.com', 'ricsan', 'P0w3rR@ng3rs!', '1996-12-27'),
+('Ana María', 'Hernández Pérez', 'anamariahp@yahoo.com', 'anamah', 'P@ssw0rd123', '1988-06-23'),
+('Francisco', 'Martínez García', 'franmargarcia@yahoo.com', 'framarg', 'G00dF3ll@', '1991-04-11'),
+('Marina', 'García Rodríguez', 'marinagar@gmail.com', 'margar', 'D@rkW1nt3r#', '1998-02-19'),
+('Alberto', 'Fernández García', 'albertofernandez@hotmail.com', 'albfer', 'P@s$w0rd', '1995-09-08'),
+('Carmen', 'González Pérez', 'carmengonzalez@yahoo.com', 'cargonz', 'S3cr3tP@ss#', '1990-01-04'),
+('Manuela', 'López Fernández', 'manuelalf@hotmail.com', 'manlop', 'Th3L@stD@nc3!', '1997-07-29'),
+('Javier', 'Pérez García', 'javierperez@gmail.com', 'javper', 'B1rdm@n#', '1993-03-15'),
+('Isabel', 'García Martínez', 'isabelgarciamartinez@hotmail.com', 'isagmar', 'L0v3U2$', '1986-11-02'),
+('Pablo', 'Fernández López', 'pablofernandez@gmail.com', 'pabfer', 'Th3P@ssw0rd#', '1999-05-17'),
+('Mónica', 'González Sánchez', 'monicagonzalez@yahoo.com', 'mongon', 'L3tM_3In', '1994-09-09'),
+('Sara', 'López Martín', 'saralopez@hotmail.com', 'saloma', 'H0lySh1t!', '1991-12-28'),
+('Diego', 'García Pérez', 'diegogarciaperez@yahoo.com', 'digarp', 'B00kW0rm#', '1996-08-07'),
+('Laura', 'Sánchez García', 'laurasanchez@yahoo.com', 'lausangar', 'G00dM0v13$', '1987-02-01'),
+('Jesús', 'Martínez Rodríguez', 'jesusmartinez@hotmail.com', 'jesmar', 'M1nd0v3rM@tt3r#', '1992-10-19'),
+('María Carmen', 'García Fernández', 'mariacarmengarcia@yahoo.com', 'macargaf', 'P@$$w0rd123', '1998-06-16');
 
 INSERT INTO cliente VALUES 
 (1,'Juan', 'Pérez González', 'juanpg@gmail.com', 'juapgo', 'B@rr4Cud@!', '1990-05-15'),
@@ -356,7 +373,24 @@ INSERT INTO cliente VALUES
 (9,'Silvia', 'García García', 'silviagar@hotmail.com', 'silgarc', 'S1lv3rSurf3r&', '1994-01-31'),
 (10,'David', 'Martínez Sánchez', 'davidms@yahoo.com', 'davmas', 'N3v3rG1v3Up#', '1989-03-22'),
 (11,'Lucía', 'Pérez García', 'luciapg@gmail.com', 'lucper', 'M1ndTh3G@p#', '1997-11-07'),
-(12,'Manuel', 'González Fernández', 'manuelgf@yahoo.com', 'mangon', 'P@ssw0rd!', '1993-05-02');
+(12,'Manuel', 'González Fernández', 'manuelgf@yahoo.com', 'mangon', 'P@ssw0rd!', '1993-05-02'),
+(30,'Marta', 'Rodríguez Martín', 'martarodriguez@gmail.com', 'marrod', 'C00k13M0n$t3r#', '1992-08-10'),
+(14,'Ricardo', 'Sánchez González', 'ricardosanchez@hotmail.com', 'ricsan', 'P0w3rR@ng3rs!', '1996-12-27'),
+(15,'Ana María', 'Hernández Pérez', 'anamariahp@yahoo.com', 'anamah', 'P@ssw0rd123', '1988-06-23'),
+(16,'Francisco', 'Martínez García', 'franmargarcia@yahoo.com', 'framarg', 'G00dF3ll@', '1991-04-11'),
+(17,'Marina', 'García Rodríguez', 'marinagar@gmail.com', 'margar', 'D@rkW1nt3r#', '1998-02-19'),
+(18,'Alberto', 'Fernández García', 'albertofernandez@hotmail.com', 'albfer', 'P@s$w0rd', '1995-09-08'),
+(19,'Carmen', 'González Pérez', 'carmengonzalez@yahoo.com', 'cargonz', 'S3cr3tP@ss#', '1990-01-04'),
+(20,'Manuela', 'López Fernández', 'manuelalf@hotmail.com', 'manlop', 'Th3L@stD@nc3!', '1997-07-29'),
+(21,'Javier', 'Pérez García', 'javierperez@gmail.com', 'javper', 'B1rdm@n#', '1993-03-15'),
+(22,'Isabel', 'García Martínez', 'isabelgarciamartinez@hotmail.com', 'isagmar', 'L0v3U2$', '1986-11-02'),
+(23,'Pablo', 'Fernández López', 'pablofernandez@gmail.com', 'pabfer', 'Th3P@ssw0rd#', '1999-05-17'),
+(24,'Mónica', 'González Sánchez', 'monicagonzalez@yahoo.com', 'mongon', 'L3tM_3In', '1994-09-09'),
+(25,'Sara', 'López Martín', 'saralopez@hotmail.com', 'saloma', 'H0lySh1t!', '1991-12-28'),
+(26,'Diego', 'García Pérez', 'diegogarciaperez@yahoo.com', 'digarp', 'B00kW0rm#', '1996-08-07'),
+(27,'Laura', 'Sánchez García', 'laurasanchez@yahoo.com', 'lausangar', 'G00dM0v13$', '1987-02-01'),
+(28,'Jesús', 'Martínez Rodríguez', 'jesusmartinez@hotmail.com', 'jesmar', 'M1nd0v3rM@tt3r#', '1992-10-19'),
+(29,'María Carmen', 'García Fernández', 'mariacarmengarcia@yahoo.com', 'macargaf', 'P@$$w0rd123', '1998-06-16');
 
 INSERT INTO administrador VALUES 
 (13,'Roberto','Rebolledo Naharro','robertorebolledo151@gmail.com','krobert151','Krobert_151','2004-10-12','30278480S');
@@ -374,15 +408,112 @@ INSERT INTO producto (nombre, precioU, descripcion, valoracion, categoria) VALUE
 ('Set de cuchillos para cocina', 59.99, 'Set de 3 cuchillos profesionales para cortar y picar alimentos.', 4.5, 'Cocina'),
 ('Binoculares de alta potencia', 129.99, 'Binoculares con aumento de 10x para observación de aves y fauna.', 4.2, 'Naturaleza'),
 ('Mochila de hidratación', 39.99, 'Mochila con bolsa de hidratación incluida, ideal para deportes de montaña.', 4.6, 'Senderismo'),
-('Tienda de campaña para 2 personas', 89.99, 'Tienda de campaña compacta para 2 personas, fácil de armar y resistente.', 4.0, 'Camping');
+('Tienda de campaña para 2 personas', 89.99, 'Tienda de campaña compacta para 2 personas, fácil de armar y resistente.', 4.0, 'Camping'),
+('Navaja multiusos', 25.99, 'Navaja con múltiples funciones para actividades al aire libre', 4.5, 'Supervivencia'),
+('Kit de supervivencia', 99.99, 'Kit de supervivencia para situaciones extremas', 4.0, 'Supervivencia'),
+('Binoculares', 79.99, 'Binoculares para exploración y observación de la naturaleza', 4.3, 'Exploración'),
+('Brújula de alta precisión', 12.50, 'Brújula de alta precisión para orientación en exteriores', 4.7, 'Exploración'),
+('Mochila de expedición', 189.99, 'Mochila resistente para expediciones de varios días', 4.2, 'Expedición'),
+('Saco de dormir', 149.99, 'Saco de dormir para climas fríos', 4.4, 'Expedición'),
+('Botas de montañismo', 129.99, 'Botas de montañismo resistentes y cómodas', 4.6, 'Montañismo'),
+('Piolet de escalada', 89.99, 'Piolet de escalada para ascensos técnicos en hielo y nieve', 4.8, 'Montañismo'),
+('Cuchillo para campo', 34.99, 'Cuchillo para actividades en el campo y la naturaleza', 4.1, 'Campo'),
+('Linterna de alta potencia', 29.99, 'Linterna potente y resistente para actividades nocturnas', 4.5, 'Campo'),
+('Navaja suiza', 19.99, 'Ideal para cualquier situación de supervivencia', 4.5, 'Supervivencia'),
+('Kit de primeros auxilios', 39.99, 'Incluye vendas, alcohol, gasas, tijeras, etc.', 4.2, 'Supervivencia'),
+('Brújula', 9.99, 'Para no perder el rumbo en tus expediciones', 4.0, 'Exploración'),
+('Bolsa impermeable', 24.99, 'Mantiene tus pertenencias secas en cualquier condición climática', 4.6, 'Expedición'),
+('Linterna frontal', 14.99, 'Ilumina tus caminos en las noches más oscuras', 4.3, 'Montañismo'),
+('Botas de senderismo', 79.99, 'Cómodas y resistentes, perfectas para largas caminatas', 4.7, 'Montañismo'),
+('Cuchillo de supervivencia', 49.99, 'Cuchilla afilada y mango antideslizante', 4.4, 'Supervivencia'),
+('Saco de dormir', 64.99, 'Mantente cálido y cómodo en tus expediciones nocturnas', 4.5, 'Expedición'),
+('Manta térmica', 4.99, 'Mantiene el calor corporal en situaciones extremas', 4.2, 'Supervivencia'),
+('Botiquín para mascotas', 29.99, 'Incluye todo lo necesario para atender a tu mascota en caso de emergencia', 4.8, 'Supervivencia')
 
-INSERT INTO venta (cliente,fecha,total) VALUES 
-(2,'2023-02-28',29.98),
-(3,'2023-03-01',129.99),
-(6,'2023-01-09',69.99);
 
-INSERT INTO lineaventa (cod_venta,id_producto,uds,preciototal) VALUES 
-(1,2,2,29.98),
-(2,3,1,129.99),
-(3,6,1,69.99);
+INSERT INTO venta (cliente, fecha, total)
+VALUES
+(1, '2022-01-15', 120.50),
+(3, '2022-01-17', 75.00),
+(5, '2022-01-19', 36.75),
+(7, '2022-01-22', 182.30),
+(9, '2022-01-24', 98.90),
+(11, '2022-01-26', 52.40),
+(12, '2022-01-29', 87.80),
+(15, '2022-02-01', 63.25),
+(17, '2022-02-03', 21.50),
+(19, '2022-02-06', 42.00),
+(2, '2022-02-08', 92.10),
+(4, '2022-02-11', 178.20),
+(6, '2022-02-13', 51.75),
+(8, '2022-02-16', 103.80),
+(10, '2022-02-18', 68.50),
+(16, '2022-02-23', 115.60),
+(18, '2022-02-26', 80.00),
+(21, '2022-02-28', 26.75),
+(23, '2022-03-03', 92.90),
+(2, '2022-02-09', 158.20),
+(4, '2022-02-12', 89.75),
+(6, '2022-02-15', 47.30),
+(8, '2022-02-18', 73.90),
+(10, '2022-02-21', 120.40),
+(16, '2022-02-27', 36.50),
+(18, '2022-03-02', 55.00),
+(20, '2022-03-05', 80.75),
+(22, '2022-03-08', 102.30),
+(24, '2022-03-11', 67.40),
+(26, '2022-03-14', 29.90),
+(28, '2022-03-17', 75.20),
+(1, '2022-03-20', 42.75),
+(3, '2022-03-23', 63.80),
+(5, '2022-03-26', 91.10),
+(7, '2022-03-29', 117.50),
+(9, '2022-04-01', 84.20),
+(11, '2022-04-04', 52.60),
+(14, '2022-04-07', 97.30),
+(16, '2022-04-10', 38.90),
+(18, '2022-04-13', 56.25),
+(20, '2022-04-16', 74.80),
+(23, '2022-04-19', 120.10),
+(25, '2022-04-22', 65.75),
+(27, '2022-04-25', 87.20),
+(29, '2022-04-28', 53.90);
+
+SELECT * FROM venta;
+
+SELECT p.nombre,p.id_producto ,p.preciou
+FROM producto p;
+
+INSERT INTO lineaVenta (cod_venta, id_producto, uds, precioTotal)
+VALUES
+(1, 1, 2, 119,98),
+(1, 30, 1, 64.99),
+(1, 6, 1, 79.99),
+(2, 1, 4, 60.00),
+(2, 3, 2, 15.00),
+(3, 5, 1, 12.75),
+(4, 2, 3, 38.25),
+(4, 4, 2, 60.00),
+(4, 6, 1, 84.05),
+(5, 3, 1, 12.50),
+(5, 5, 3, 24.00),
+(6, 1, 2, 30.00),
+(6, 2, 1, 12.75),
+(6, 4, 1, 15.00),
+(7, 5, 4, 72.00),
+(7, 6, 2, 80.30),
+(8, 3, 1, 7.50),
+(8, 4, 3, 45.00),
+(9, 2, 2, 25.50),
+(9, 6, 1, 48.90),
+(10, 1, 1, 15.00),
+(10, 4, 1, 15.00);
+
+SELECT * FROM especie e;
+SELECT * FROM usuario u;
+
+
+INSERT INTO encuentro VALUES (especie,usuario,fechaencuentro,hora,descripcion,foto,zona,sexo);
+(),
+
 
